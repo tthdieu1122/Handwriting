@@ -1,0 +1,23 @@
+import numpy as np
+from joblib import dump, load
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
+
+
+classifier = Pipeline([('scaler', MinMaxScaler()), ('classifier', KNeighborsClassifier())])
+
+
+def predict(img):
+    """
+    Method to run prediction on a single image.
+    """
+
+    img = np.dot(img[..., :3], [0.299, 0.587, 0.114])
+    img = img.flatten()
+
+    return classifier.predict([img])[0]
+
+
+def load_model():
+    return load('models/classifier.joblib')
